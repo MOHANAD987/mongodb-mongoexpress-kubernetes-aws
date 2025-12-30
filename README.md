@@ -98,7 +98,9 @@ This repository provides a comprehensive visual walkthrough of the entire deploy
 
 
 ## 📂 Repository Structure
+
 ```text
+
 mongodb-project/
 ├── architecture/            # 📐 Reference Architecture Diagram
 ├── screenshots/             # 📸 Step-by-step Execution Screenshots
@@ -113,7 +115,12 @@ mongodb-project/
 ├── LICENSE                  # ⚖️ MIT License
 └── README.md                # 📖 Project Documentation
 
+
+
 ---
+
+
+
 
 
 ⚖️ License
@@ -122,9 +129,11 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ---
 
 
+
+
 👨‍💻 Author
 Mohanad Faisal
 DevOps Engineer | Cloud & Kubernetes Enthusiast
 
 ---
-ترجمة
+
