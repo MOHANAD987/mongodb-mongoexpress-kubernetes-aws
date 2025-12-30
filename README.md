@@ -115,23 +115,17 @@ mongodb-project/
 ├── LICENSE                  # ⚖️ MIT License
 └── README.md                # 📖 Project Documentation
 
-
-
 ---
 
 
-
-
-
-⚖️ License
+##⚖️ License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
+
 ---
 
 
-
-
-👨‍💻 Author
+##👨‍💻 Author
 Mohanad Faisal
 DevOps Engineer | Cloud & Kubernetes Enthusiast
 
