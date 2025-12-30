@@ -1,224 +1,130 @@
+# 🚀 MongoDB & Mongo Express Deployment on Kubernetes (AWS)
 
-🚀 MongoDB & Mongo Express Deployment on Kubernetes (AWS)
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)
 
+## 📌 Project Overview
+This project demonstrates a **production-ready deployment** of MongoDB on a Kubernetes cluster (kubeadm) running on AWS EC2. It showcases the integration of **Amazon EBS CSI Driver** for dynamic persistent storage and provides a web-based management interface via **Mongo Express**, securely exposed through an AWS LoadBalancer.
 
-📌 Project Overview
+> **Objective:** To implement a secure, scalable, and persistent stateful workload on Kubernetes using cloud-native storage solutions.
 
-This project demonstrates a production-like deployment of MongoDB on Kubernetes (kubeadm) running on AWS, with persistent storage using Amazon EBS CSI Driver and a Mongo Express web-based admin interface exposed via a LoadBalancer.
+---
 
-The goal of this project is to showcase real-world DevOps practices for running stateful applications on Kubernetes, integrating cloud-native storage, and managing secure access to databases.
 
+## 🏗️ Architecture Overview
+The system design ensures high availability and data durability by decoupling the database engine from the underlying storage.
 
+### 🏛️ System Architecture Diagram
+To better understand the infrastructure design, please refer to the high-resolution architecture blueprint located in the repository:
 
-🏗️ Architecture Overview
+### 🖼️ **[architecture/](./architecture/)**
 
-Kubernetes Cluster (kubeadm-based)
 
-MongoDB deployed as a Kubernetes Deployment
 
-Amazon EBS used for persistent storage (RWO)
+> **Infrastructure Blueprint:** This diagram illustrates the relationship between the Kubernetes workloads (Deployments & Services) and the AWS Cloud resources (EBS Volumes & IAM Policies), providing a comprehensive overview of the system's design.
 
-AWS EBS CSI Driver for dynamic volume provisioning
+### **🚦 Traffic & Data Flow:**
+1. 🌐 **Public Access:** Users access **Mongo Express** via HTTP on port `8081` through an **AWS LoadBalancer**.
+2. 🔄 **Internal Communication:** Mongo Express connects to the **MongoDB Service** (ClusterIP) within the cluster.
+3. 💾 **Persistence:** The MongoDB Pod mounts a **Persistent Volume (PV)** backed by **Amazon EBS**, managed dynamically by the **CSI Driver**.
 
-Mongo Express as a web-based MongoDB admin UI
+---
 
-Kubernetes Secrets & ConfigMaps for secure configuration
 
-LoadBalancer Service for external access
+## ✨ Key Features
+| Feature | Implementation Details |
+| :--- | :--- |
+| **Data Persistence** | **Amazon EBS (RWO)** ensures data survives Pod restarts or failures. |
+| **Storage Management** | **Dynamic Provisioning** using a custom StorageClass (`ebs.csi.aws.com`). |
+| **Security** | **K8s Secrets** for credentials and **ConfigMaps** for environment-specific settings. |
+| **Administration** | **Mongo Express UI** for easy browser-based database management. |
+| **Scalability** | Designed as a **Deployment** to leverage K8s orchestration and recovery. |
 
+---
 
-User
- │
- │  (HTTP :8081)
- ▼
-Mongo Express (LoadBalancer Service)
- │
- │  (Internal Cluster Communication)
- ▼
-MongoDB Service (ClusterIP)
- │
- │
- ▼
-MongoDB Pod
- │
- ▼
-Amazon EBS (Persistent Volume)
 
+## 📸 Implementation Documentation (Step-by-Step)
+This repository provides a comprehensive visual walkthrough of the entire deployment lifecycle. Detailed proof of implementation—from infrastructure provisioning to final application verification—is documented within the dedicated directory below:
 
+### 📂 **[screenshots](./screenshots/)**
 
-✨ Key Features
+> This gallery serves as a step-by-step technical guide, showcasing the successful execution of all Kubernetes manifests and the seamless integration of AWS cloud-native resources.
 
-✔ Deploy MongoDB as a stateful workload on Kubernetes
-✔ Use Amazon EBS (RWO) for persistent database storage
-✔ Dynamic volume provisioning via AWS EBS CSI Driver
-✔ Secure credentials management using Kubernetes Secrets
-✔ Decoupled configuration using ConfigMaps
-✔ Mongo Express UI for easy database administration
-✔ External access via AWS LoadBalancer
-✔ Designed to reflect real production environments
+---
 
 
+## 🧰 Technologies & Tools
+* **Orchestration:** Kubernetes (kubeadm)
+* **Cloud Infrastructure:** AWS (EC2, IAM, EBS)
+* **Database:** MongoDB
+* **UI Management:** Mongo Express
+* **Storage Integration:** AWS EBS CSI Driver
+* **Automation:** YAML Manifests
 
-🧰 Technologies Used
+---
 
-Kubernetes (kubeadm)
 
-Docker
+## 🚀 How to Deploy
 
-MongoDB
+1.  **Clone the Repository:**
+    ```bash
+    git clone [https://github.com/MOHANAD987/mongodb-project.git](https://github.com/MOHANAD987/mongodb-project.git)
+    cd mongodb-project
+    ```
 
-Mongo Express
+2.  **Apply Storage & Security Manifests:**
+    ```bash
+    kubectl apply -f mongodb-sc.yaml
+    kubectl apply -f mongodb-secret.yaml
+    kubectl apply -f mongodb-cm.yaml
+    kubectl apply -f mongodb-pvc.yaml
+    ```
 
-AWS EC2
+3.  **Deploy the Application:**
+    ```bash
+    kubectl apply -f mongodb-app.yaml
+    kubectl apply -f mongo-express-app.yaml
+    kubectl apply -f mongo-express-svc.yaml
+    ```
 
-Amazon EBS
+4.  **Access the Dashboard:**
+    * Retrieve the LoadBalancer URL: `kubectl get svc mongo-express-svc`
+    * Open `http://<EXTERNAL-IP>:8081` in your browser.
 
-AWS IAM
+---
 
-AWS EBS CSI Driver
 
-YAML (Kubernetes Manifests)
-
-
-
-🔐 AWS & Kubernetes Integration
-AWS IAM Configuration
-
-Created IAM User and Role
-
-Attached policy:
-
-AmazonEBSCSIDriverPolicy
-
-Generated Access Keys
-
-Stored credentials securely as Kubernetes Secrets
-
-CSI Drivers Verification
-kubectl get csidriver
-kubectl get csinode
-
-
-Both EBS and EFS CSI drivers are installed and recognized by the cluster.
-
-
-
-📦 Kubernetes Resources
-Secrets
-
-MongoDB credentials stored securely using Kubernetes Secrets
-
-Storage
-
-Custom StorageClass using ebs.csi.aws.com
-
-PersistentVolumeClaim with ReadWriteOnce access mode
-
-Workloads
-
-MongoDB Deployment with persistent storage
-
-Mongo Express Deployment for database administration
-
-Services
-
-MongoDB exposed internally using ClusterIP
-
-Mongo Express exposed externally using LoadBalancer
-
-
-
-🌐 Accessing Mongo Express
-
-Once the LoadBalancer service is created, retrieve the external IP:
-
-kubectl get svc mongo-express-svc
-
-
-Access Mongo Express from your browser:
-
-http://<EXTERNAL-IP>:8081
-
-
-Login using the MongoDB credentials stored in Kubernetes Secrets.
-
-
-
-📸 Screenshots & Documentation
-
-This repository includes:
-
-Architecture diagrams
-
-Kubernetes manifests
-
-Step-by-step deployment process
-
-AWS EBS volume verification
-
-
-
-🎯 Real-World Value
-
-This project reflects real enterprise scenarios where:
-
-Databases must be persistent and reliable
-
-Infrastructure is cloud-based
-
-Storage is dynamically provisioned
-
-Security best practices are enforced
-
-Applications are containerized and scalable
-
-It demonstrates the ability to operate stateful workloads on Kubernetes, a critical skill for DevOps and Cloud Engineers.
-
-
-
-🧠 Skills Demonstrated
-
-Kubernetes administration
-
-Stateful application deployment
-
-Cloud storage integration
-
-AWS IAM & security
-
-DevOps best practices
-
-Production-ready system design
-
-
-
-
-📎 Repository Structure
+## 📂 Repository Structure
+```text
 mongodb-project/
-├── mongodb-secret.yaml
-├── mongodb-sc.yaml
-├── mongodb-pvc.yaml
-├── mongodb-app.yaml
-├── mongodb-svc.yaml
-├── mongodb-cm.yaml
-├── mongo-express-app.yaml
-├── mongo-express-svc.yaml
-└── README.md
-├── screenshots/
-├── Architecture
+├── architecture/            # 📐 Reference Architecture Diagram
+├── screenshots/             # 📸 Step-by-step Execution Screenshots
+├── mongodb-secret.yaml      # 🔐 Encrypted Credentials
+├── mongodb-sc.yaml          # 💾 StorageClass (ebs.csi.aws.com)
+├── mongodb-pvc.yaml         # 📂 PersistentVolumeClaim
+├── mongodb-app.yaml         # 🚀 MongoDB Deployment
+├── mongodb-svc.yaml         # 🔌 Internal ClusterIP Service
+├── mongodb-cm.yaml          # ⚙️ App Configurations
+├── mongo-express-app.yaml   # 🖥️ Admin UI Deployment
+├── mongo-express-svc.yaml   # 🌐 External LoadBalancer Service
+├── LICENSE                  # ⚖️ MIT License
+└── README.md                # 📖 Project Documentation
 
+---
+
+
+⚖️ License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+---
 
 
 👨‍💻 Author
-
-Mohannad Faisal
+Mohanad Faisal
 DevOps Engineer | Cloud & Kubernetes Enthusiast
 
-🔗 GitHub: https://github.com/MOHANAD987
-
-
-
-⭐ Final Note
-
-If you find this project useful or inspiring, feel free to ⭐ star the repository or share feedback.
+---
 ترجمة
